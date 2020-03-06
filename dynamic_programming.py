@@ -12,7 +12,7 @@ class DynamicProgrammingSolver():
 		transition_array = np.zeros(shape=(len(self.states), len(self.actions), len(self.states)))
 		reward_array = np.full(shape=(len(self.states),len(self.actions),len(self.states)), fill_value=0)
 		for state in self.states:
-			for action in self.actions:
+			for action in self.possible_actions(state):
 				for next_state_tuple in self.env.P[state][action]:
 					transition_probability, next_state, next_state_reward, next_state_is_final = next_state_tuple
 					is_final_array[next_state] = next_state_is_final
@@ -23,10 +23,12 @@ class DynamicProgrammingSolver():
 		self.reward_array = reward_array
 		self.is_final_array = is_final_array
 
+	def possible_actions(self, state):
+		omega,_=np.unravel_index(state,self.env.shape)
+		return range(omega+1)
 
 	def greedy_policy(self, state, v_array, gamma):
-		return [(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.actions].argmax()
-
+		return [(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.possible_actions(state)].argmax()
 
 	def value_iteration(self, gamma=1, epsilon=0.001):
 		# Initialize value functions with zeros
