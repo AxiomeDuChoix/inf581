@@ -5,7 +5,7 @@ class DynamicProgrammingSolver():
 
 	def __init__(self, env):
 		self.env = env
-		self.states = list(range(self.env.action_space.n))
+		self.states = list(range(self.env.observation_space.n))
 		self.actions = list(range(self.env.action_space.n))
 
 		is_final_array = np.full(shape=len(self.states), fill_value=False, dtype=np.bool)
@@ -28,9 +28,9 @@ class DynamicProgrammingSolver():
 		return range(omega+1)
 
 	def greedy_policy(self, state, v_array, gamma):
-		return [(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.possible_actions(state)].argmax()
+		return np.array([(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.possible_actions(state)]).argmax()
 
-	def value_iteration(self, gamma=1, epsilon=0.001):
+	def value_iteration(self, gamma=1.0, epsilon=0.001):
 		# Initialize value functions with zeros
 		v_array = np.zeros(len(self.states))   
 		stop = False
@@ -46,7 +46,7 @@ class DynamicProgrammingSolver():
 				if self.is_final_array[state]:
 					new_v_array[state] = 0
 				else:
-					new_v_array[state] = max([(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.actions])
+					new_v_array[state] = max([(self.transition_array[state, action]*(self.reward_array[state, action] + gamma*v_array)).sum() for action in self.possible_actions(state)])
 				
 				delta = max(abs(new_v_array[state] - v_array[state]), delta)
 			

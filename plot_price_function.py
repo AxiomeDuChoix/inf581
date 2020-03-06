@@ -109,5 +109,4 @@ def main():
      plot_price_strategy(quantities_sold, prices, sells_opt)
      
 
-main()
 
