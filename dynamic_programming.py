@@ -24,7 +24,7 @@ class DynamicProgrammingSolver():
 		self.is_final_array = is_final_array
 
 
-	def greedy_policy(self, state, v_array):
+	def greedy_policy(self, state, v_array, gamma):
 		return [(self.transition_array[state, action]*(self.reward_array[state, action] + gamma * v_array)).sum() for action in self.actions].argmax()
 
 
@@ -54,7 +54,7 @@ class DynamicProgrammingSolver():
 			if delta < epsilon:
 				stop = True
 
-		policy = [self.greedy_policy(state, v_array) for state in self.states]       
+		policy = [self.greedy_policy(state, v_array, gamma) for state in self.states]       
 
 		return v_array, policy, delta_history
 
@@ -104,7 +104,7 @@ class DynamicProgrammingSolver():
 
 			for state in self.states:
 
-				new_policy[state] = self.greedy_policy(state, v_array)
+				new_policy[state] = self.greedy_policy(state, v_array, gamma)
 
 			if np.array_equal(new_policy, policy):
 				stop = True
