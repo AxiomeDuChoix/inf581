@@ -1,5 +1,5 @@
-import gym
 import numpy as np
+import copy
 
 class DynamicProgrammingSolver():
 
@@ -54,14 +54,14 @@ class DynamicProgrammingSolver():
 			if delta < epsilon:
 				stop = True
 
-		policy = [greedy_policy(state, v_array) for state in self.states]       
+		policy = [self.greedy_policy(state, v_array) for state in self.states]       
 
 		return v_array, policy, delta_history
 
 
 	def policy_evaluation(self, policy, gamma, epsilon):
 		# Initialize value functions with zeros
-		v_array = np.zeros(len(states))   
+		v_array = np.zeros(len(self.states))   
 		stop = False
 
 
@@ -98,13 +98,13 @@ class DynamicProgrammingSolver():
 
 		while not stop:
 
-			v_array = policy_evaluation(policy, gamma, epsilon)
+			v_array = self.policy_evaluation(policy, gamma, epsilon)
 
 			new_policy = np.copy(policy)
 
 			for state in self.states:
 
-				new_policy[state] = greedy_policy(state, v_array)
+				new_policy[state] = self.greedy_policy(state, v_array)
 
 			if np.array_equal(new_policy, policy):
 				stop = True
