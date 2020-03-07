@@ -1,13 +1,13 @@
 import numpy as np
 
 class TDLearningSolver():
+    
+    def __init__(self, env):
+        self.env = env
+        self.states = list(range(self.env.action_space.n))
+        self.actions = list(range(self.env.action_space.n))
 
-	def __init__(self, env):
-		self.env = env
-		self.states = list(range(self.env.action_space.n))
-		self.actions = list(range(self.env.action_space.n))
- 
-    def epsilon_greedy_policy(self, state, epsilon, q_array): 
+    def epsilon_greedy_policy(self, state, epsilon, q_array):
         if np.random.uniform(0, 1) < epsilon: 
             action = self.env.action_space.sample() 
         else: 
@@ -21,13 +21,13 @@ class TDLearningSolver():
     def sarsa(self, alpha = 0.9, gamma = 0.95, epsilon = 0.1, total_episodes = 1000, t = 100):
         
         #Initialize value functions with zeros
-		q_array = np.zeros(shape=(len(self.states),len(self.actions)))
+        q_array = np.zeros(shape=(len(self.states),len(self.actions)))
         q_array_memory = np.zeros(shape=(total_episodes//t,len(self.states),len(self.actions)))
 
         #SARSA learning 
         for episode in range(total_episodes): 
             t = 0
-            state1 = self.env.reset() 
+            state1 = np.ravel_multi_index(self.env.reset(), self.env.shape)
             action1 = self.epsilon_greedy_policy(state1, epsilon, q_array) 
 
             while (not done):
@@ -53,7 +53,7 @@ class TDLearningSolver():
            
 
     #Q_learning solver:
-    def q_learning(self, alpha = 0.9, gamma = 0.95, epsilon = 0.1, total_episodes = 1000, t = 100)
+    def q_learning(self, alpha = 0.9, gamma = 0.95, epsilon = 0.1, total_episodes = 1000, t = 100):
 
         #Initialize value functions with zeros
         q_array = np.zeros(shape=(len(self.states),len(self.actions)))
@@ -62,7 +62,7 @@ class TDLearningSolver():
         #Qlearning 
         for episode in range(total_episodes): 
             t = 0
-            state1 = self.env.reset() 
+            state1 = np.ravel_multi_index(self.env.reset(), self.env.shape) 
 
             while (not done): 
         
