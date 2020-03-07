@@ -75,7 +75,7 @@ class TDLearningSolver():
                 state2, reward, done, info = self.env.step(action1) 
         
                 #Choosing the next action, this time following the greedy policy
-                action2 = self.greedy_policy(state2, epsilon, q_array) 
+                action2 = self.greedy_policy(state2, q_array) 
                 
                 #Learning the Q-value 
                 td = reward + gamma * q_array[state2,action2] - q_array[state1,action1]
