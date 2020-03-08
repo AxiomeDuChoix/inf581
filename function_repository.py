@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches                                                                                                                                                  
 from scipy.signal import argrelextrema
 from math import log10
+import math
 
 class FunctionRepository():
      def __init__(self,x,omega_0):
@@ -19,3 +20,11 @@ class FunctionRepository():
           """
           log_omega_0 = int(log10(self.omega_0))
           return np.exp((self.omega_0-self.x)/10**(log_omega_0))+((self.omega_0 - self.x)/(period*10**(log_omega_0-1)))*np.cos(self.x/period*(2*np.pi)) - 1.0
+
+     def brownian_decr_function(self):
+          N=1221
+          Δt_sqrt = math.sqrt(1 / N)
+          Z = np.random.randn(N)
+          Z[0] = 0
+          B = np.cumsum(Δt_sqrt * Z)
+          return B

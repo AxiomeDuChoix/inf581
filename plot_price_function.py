@@ -91,6 +91,10 @@ class PlotFunction():
           # Plot the price function
           prices = function_repository.FunctionRepository(quantities_sold, self.omega_0).cos_exp_function( self.period)     
           self.plot_prices(quantities_sold, prices, x_high_price, y_high_price)
+
+          # Plot the price function
+          prices = function_repository.FunctionRepository(quantities_sold, self.omega_0).brownian_decr_function()    
+          self.plot_prices(quantities_sold, prices, x_high_price, y_high_price)
           
           # Plot the reward of a random selling strategy
           sells_rd = self.selling_strategy(quantities_sold, prices, self.step, self.period, self.omega_0, 'random')
