@@ -11,18 +11,13 @@ from math import log10
 import function_repository
 
 class PlotFunction():
- # Hyperparamters, that can be modified
-     omega_0 = 122 # Initial quantity of shares the agent A does own
-     period = 25 # Period of the cosine := size of the sets of interest for the buyer
 
-     step = 0.1 # Resolution of the plot 
      plt.rcParams["figure.figsize"] = (8,8) # Size for the plot  
 
-     def __init__(self, env):
-	     self.env = env
-
-    
-                    
+     def __init__(self, omega_0, period, step):
+          self.omega_0=omega_0
+          self.period=period
+          self.step=step
 
 
      def plot_prices(self,quantities_sold, prices, x_high_price, y_high_price): # Plot the prices with an highlight on the high interest sets in the 'coffee' example
@@ -68,7 +63,7 @@ class PlotFunction():
                
           return np.array(sells)
      
-     def plot_price_strategy(self,quantities_sold, prices, sells):
+     def plot_price_strategy(self,quantities_sold, prices, sells,step):
           # Allow the visualization in the coffee example
           profit = 0
           plt.figure(figsize=(8,8))
@@ -88,22 +83,21 @@ class PlotFunction():
      def main(self):
           # Run main to plot all the figures from the report
           
-          quantities_sold = np.arange(0,omega_0+step,step) # Different quantities that the agent does sell                                                                                                                                                                                                                                    
+          quantities_sold = np.arange(0,self.omega_0+self.step,self.step) # Different quantities that the agent does sell                                                                                                                                                                                                                                    
 
-          x_high_price = np.array([period * i for i in range(1,int(omega_0 / period)+1)]) # The packs of shares of interest for the buyer
-          y_high_price = price_function(x_high_price, omega_0, period)
+          x_high_price = np.array([self.period * i for i in range(1,int(self.omega_0 / self.period)+1)]) # The packs of shares of interest for the buyer
+          y_high_price = function_repository.FunctionRepository(x_high_price, self.omega_0 ).cos_exp_function(self.period)
           
           # Plot the price function
-          prices = function_repository.cos(quantities_sold, omega_0, period)     
-          plot_prices(quantities_sold, prices, x_high_price, y_high_price)
+          prices = function_repository.FunctionRepository(quantities_sold, self.omega_0).cos_exp_function( self.period)     
+          self.plot_prices(quantities_sold, prices, x_high_price, y_high_price)
           
           # Plot the reward of a random selling strategy
-          sells_rd = selling_strategy(quantities_sold, prices, step, period, omega_0, 'random')
-          plot_price_strategy(quantities_sold, prices, sells_rd)
+          sells_rd = self.selling_strategy(quantities_sold, prices, self.step, self.period, self.omega_0, 'random')
+          self.plot_price_strategy(quantities_sold, prices, sells_rd,self.step)
           
           # Plot the reward of an optimal selling strategy
-          sells_opt = selling_strategy(quantities_sold, prices, step, period, omega_0, 'optimal')
-          plot_price_strategy(quantities_sold, prices, sells_opt)
-          
+          sells_opt = self.selling_strategy(quantities_sold, prices, self.step, self.period, self.omega_0, 'optimal')
+          self.plot_price_strategy(quantities_sold, prices, sells_opt, self.step)  
 
 
