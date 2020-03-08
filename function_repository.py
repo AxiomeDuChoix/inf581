@@ -1,5 +1,5 @@
 import numpy as np
-import random as rd                                                                                                                                                               
+import random as rd                                                                                                                                                              
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches                                                                                                                                                  
 from scipy.signal import argrelextrema
